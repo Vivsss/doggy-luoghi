@@ -1,0 +1,8 @@
+[
+  {
+    "nome": "Roma",
+    "file": "roma.json",
+    "fonte": "https://download.geofabrik.de/europe/italy/centro-latest.osm.pbf",
+    "bbox": [12.23, 41.65, 12.86, 42.10]
+  }
+]

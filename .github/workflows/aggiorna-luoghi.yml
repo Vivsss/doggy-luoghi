@@ -1,0 +1,40 @@
+name: Aggiorna luoghi
+
+# Ogni lunedì alle 02:00 UTC (le 3 o le 4 a Roma); si può lanciare anche a mano da "Actions"
+on:
+  schedule:
+    - cron: '0 2 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: aggiorna-luoghi
+  cancel-in-progress: false
+
+jobs:
+  luoghi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Installa osmium
+        run: sudo apt-get update -q && sudo apt-get install -y -q osmium-tool
+
+      - name: Scarica da Geofabrik e filtra i luoghi
+        run: python3 scripts/aggiorna.py
+
+      - name: Pubblica i file sul ramo "dati"
+        # Un solo commit, sovrascritto ogni settimana: il repository resta piccolo.
+        # Il database li legge da https://raw.githubusercontent.com/<repo>/dati/<file>.json
+        run: |
+          cd uscita
+          cp ../LICENZA-DATI.md .
+          git init -q -b dati
+          git config user.name "doggy-luoghi"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -q -m "Luoghi aggiornati il $(date -u +%Y-%m-%d)"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" dati
