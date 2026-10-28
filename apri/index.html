@@ -25,7 +25,7 @@
 <main>
   <div class="logo" aria-hidden="true">🐾</div>
   <h1 id="title">Apri in Doggy</h1>
-  <p id="text">Tocca il pulsante per aprire il contenuto nell'app.</p>
+  <p id="text">Stiamo aprendo Doggy… Se non si apre da solo, tocca il pulsante.</p>
   <a class="btn" id="open" href="#">Apri in Doggy</a>
   <small>Non hai ancora Doggy? Presto su App Store e Google Play.</small>
 </main>
@@ -44,8 +44,8 @@
       return;
     }
     btn.href = target;
-    // proviamo ad aprire subito l'app; se il telefono lo blocca resta il pulsante
-    setTimeout(function () { location.href = target; }, 300);
+    // apriamo subito l'app; se il browser lo blocca (succede nei browser dentro le app) resta il pulsante
+    location.replace(target);
   })();
 </script>
 </body>
