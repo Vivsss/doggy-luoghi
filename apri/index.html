@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Apri in Doggy</title>
+<style>
+  :root { --prato:#1F6B4F; --foglia:#DDEBDF; --sabbia:#F4F0E6; --bosco:#1E2A24; --muted:#4A564F; }
+  * { box-sizing: border-box; }
+  body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+         background:var(--sabbia); color:var(--bosco); font-family:-apple-system, system-ui, "Segoe UI", Roboto, sans-serif; padding:24px 16px; }
+  main { width:100%; max-width:380px; background:#fff; border-radius:20px; padding:32px 24px; text-align:center;
+         box-shadow:0 4px 24px rgba(30,42,36,.08); }
+  .logo { width:72px; height:72px; border-radius:50%; background:var(--foglia); display:flex; align-items:center;
+          justify-content:center; margin:0 auto 16px; font-size:36px; }
+  h1 { font-size:22px; margin:0 0 8px; }
+  p { color:var(--muted); line-height:1.45; margin:0 0 20px; }
+  a.btn { display:block; background:var(--prato); color:#fff; text-decoration:none; font-weight:600; font-size:17px;
+          padding:14px 18px; border-radius:14px; }
+  small { display:block; margin-top:20px; color:var(--muted); font-size:13px; line-height:1.4; }
+</style>
+</head>
+<body>
+<main>
+  <div class="logo" aria-hidden="true">🐾</div>
+  <h1 id="title">Apri in Doggy</h1>
+  <p id="text">Tocca il pulsante per aprire il contenuto nell'app.</p>
+  <a class="btn" id="open" href="#">Apri in Doggy</a>
+  <small>Non hai ancora Doggy? Presto su App Store e Google Play.</small>
+</main>
+<script>
+  // Il link vero dell'app è dopo il # (es. #u=exp%3A%2F%2F…/--/passeggiata/…):
+  // dopo il # non arriva al server. Si aprono solo link di Doggy (doggy://)
+  // o di Expo Go (exp://, exps://), mai altri siti.
+  (function () {
+    var params = new URLSearchParams(location.hash.slice(1));
+    var target = params.get('u') || '';
+    var btn = document.getElementById('open');
+    if (!/^(doggy|exps?):\/\//i.test(target)) {
+      document.getElementById('title').textContent = 'Link non valido';
+      document.getElementById('text').textContent = 'Questo link non apre nulla in Doggy. Chiedi a chi te l\'ha mandato di inviarlo di nuovo.';
+      btn.style.display = 'none';
+      return;
+    }
+    btn.href = target;
+    // proviamo ad aprire subito l'app; se il telefono lo blocca resta il pulsante
+    setTimeout(function () { location.href = target; }, 300);
+  })();
+</script>
+</body>
+</html>
