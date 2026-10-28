@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: aggiorna-luoghi
@@ -38,3 +39,10 @@ jobs:
           git add .
           git commit -q -m "Luoghi aggiornati il $(date -u +%Y-%m-%d)"
           git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" dati
+
+      - name: Tieni attiva l'automazione
+        # GitHub spegne le automazioni programmate dei repository pubblici dopo 60 giorni
+        # senza attività: riattivarla ogni settimana azzera il conto.
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/aggiorna-luoghi.yml/enable"
+        env:
+          GH_TOKEN: ${{ github.token }}
