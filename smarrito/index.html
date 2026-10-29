@@ -77,10 +77,15 @@
       <textarea id="note" maxlength="300" placeholder="Es. 10 minuti fa in via Merulana, correva verso il parco"></textarea>
       <label for="contact">Come ti possono contattare (facoltativo)</label>
       <input id="contact" type="text" maxlength="80" placeholder="Nome e telefono">
+      <!-- campo trappola per i bot: le persone non lo vedono (055) -->
+      <div aria-hidden="true" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden">
+        <label for="website">Sito web</label>
+        <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+      </div>
       <div class="check"><input id="geo" type="checkbox"><label for="geo" style="margin:0;font-weight:400">Aggiungi la mia posizione attuale</label></div>
       <p id="formErr" class="err" hidden></p>
       <button id="sendBtn" class="primary" type="submit">Invia alla famiglia</button>
-      <p class="muted" style="margin-top:10px">Lo riceve solo la famiglia del cane. Il contatto lo vede solo lei.</p>
+      <p class="muted" style="margin-top:10px">Lo riceve solo la famiglia del cane. Il contatto lo vede solo lei. Niente link nel testo, per favore.</p>
     </form>
     <div id="thanks" class="thanks" hidden>Grazie! La famiglia ha ricevuto la tua segnalazione.</div>
   </section>
@@ -94,6 +99,7 @@
   var token = params.get('t');
   var appUrl = params.get('u');
   var data = null;
+  var openedAt = Date.now(); // 055: chi invia in meno di 4 secondi è un bot
 
   function rpc(fn, body) {
     return fetch(SUPABASE_URL + '/rest/v1/rpc/' + fn, {
@@ -153,7 +159,8 @@
     if (!note) { el('formErr').textContent = "Scrivi dove e quando l'hai visto."; el('formErr').hidden = false; return; }
     el('sendBtn').disabled = true;
     function send(lat, lng) {
-      rpc('lost_sighting_public', { p_token: token, p_note: note, p_contact: el('contact').value.trim() || null, p_lat: lat, p_lng: lng })
+      rpc('lost_sighting_public', { p_token: token, p_note: note, p_contact: el('contact').value.trim() || null, p_lat: lat, p_lng: lng,
+        p_website: el('website').value || null, p_elapsed_ms: Date.now() - openedAt })
         .then(function () { el('form').hidden = true; el('thanks').hidden = false; el('seenBtn').hidden = true; })
         .catch(function (err) { el('formErr').textContent = err.message; el('formErr').hidden = false; el('sendBtn').disabled = false; });
     }
