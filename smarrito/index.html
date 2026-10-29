@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Cane smarrito · Doggy</title>
+<!--
+  Pagina pubblica di un cane smarrito (app Doggy, migrazione 053).
+  Si apre con #t=<codice dell'allarme> (e &u=<link per aprirlo nell'app>).
+  Legge e scrive solo attraverso due funzioni del database pensate per chi non ha un account:
+  lost_dog_public (i dati dell'allarme) e lost_sighting_public ("L'ho visto").
+  La chiave qui sotto è quella pubblica (publishable) dell'app: non dà accesso ad altro.
+-->
+<style>
+  :root { --prato:#1F6B4F; --foglia:#DDEBDF; --sabbia:#F4F0E6; --bosco:#1E2A24; --muted:#4A564F; --rosso:#B42318; --rosa:#FDECEC; --sole:#F2A541; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--sabbia); color:var(--bosco); font-family:-apple-system, system-ui, "Segoe UI", Roboto, sans-serif; padding:16px; }
+  main { max-width:520px; margin:0 auto; display:flex; flex-direction:column; gap:14px; }
+  .card { background:#fff; border-radius:20px; padding:18px; }
+  .banner { background:var(--rosa); color:var(--rosso); border:1.5px solid var(--rosso); border-radius:16px; padding:14px 16px; font-weight:700; font-size:17px; }
+  .banner.ok { background:var(--foglia); color:var(--prato); border-color:var(--prato); }
+  .dog { display:flex; gap:16px; align-items:center; }
+  .photo { width:120px; height:120px; border-radius:60px; object-fit:cover; background:var(--sole); flex:none; }
+  h1 { margin:0; font-size:30px; }
+  .meta { color:var(--muted); margin-top:4px; line-height:1.4; }
+  p { line-height:1.5; margin:0; }
+  iframe { width:100%; height:240px; border:0; border-radius:16px; }
+  a.btn, button { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; min-height:50px; border-radius:999px;
+                  font-size:16px; font-weight:700; text-decoration:none; border:1.5px solid var(--prato); background:#fff; color:var(--prato); cursor:pointer; }
+  .primary { background:var(--rosso) !important; border-color:var(--rosso) !important; color:#fff !important; }
+  label { display:block; font-weight:600; margin:10px 0 6px; }
+  textarea, input[type=text] { width:100%; border:1px solid #D9D2C1; border-radius:12px; padding:12px; font:inherit; font-size:16px; background:#fff; }
+  textarea { min-height:90px; resize:vertical; }
+  .check { display:flex; gap:10px; align-items:center; margin:12px 0; }
+  .muted { color:var(--muted); font-size:14px; line-height:1.45; }
+  .err { color:var(--rosso); font-weight:600; }
+  .thanks { background:var(--foglia); color:var(--prato); border-radius:16px; padding:14px; font-weight:600; }
+  footer { text-align:center; color:var(--muted); font-size:13px; padding:8px 0 24px; }
+  footer b { color:var(--prato); }
+  [hidden] { display:none !important; }
+</style>
+</head>
+<body>
+<main>
+  <div id="loading" class="card">Carico l'allarme…</div>
+  <div id="missing" class="card" hidden>
+    <h1 style="font-size:22px">Allarme non trovato</h1>
+    <p class="meta">Il link non è completo, oppure l'allarme è stato chiuso da tempo.</p>
+  </div>
+
+  <section id="lost" hidden style="display:flex;flex-direction:column;gap:14px">
+    <div id="banner" class="banner"></div>
+    <div class="card dog">
+      <img id="photo" class="photo" alt="">
+      <div>
+        <h1 id="name"></h1>
+        <div id="details" class="meta"></div>
+      </div>
+    </div>
+    <div id="descBox" class="card" hidden><p id="desc"></p></div>
+    <div class="card" style="padding:8px">
+      <iframe id="map" title="Dove si è perso" loading="lazy"></iframe>
+      <p class="muted" style="padding:8px 8px 4px">Il segnaposto è il punto in cui si è perso.</p>
+    </div>
+
+    <div id="actions" style="display:flex;flex-direction:column;gap:10px">
+      <a id="call" class="btn primary" hidden>📞 Chiama la famiglia</a>
+      <button id="seenBtn" class="primary">👀 L'ho visto</button>
+      <a id="openApp" class="btn" hidden>Apri in Doggy</a>
+      <button id="shareBtn">Condividi per aiutare</button>
+    </div>
+
+    <form id="form" class="card" hidden>
+      <h2 style="margin:0 0 4px;font-size:20px">Dove e quando l'hai visto?</h2>
+      <label for="note">Cosa hai visto</label>
+      <textarea id="note" maxlength="300" placeholder="Es. 10 minuti fa in via Merulana, correva verso il parco"></textarea>
+      <label for="contact">Come ti possono contattare (facoltativo)</label>
+      <input id="contact" type="text" maxlength="80" placeholder="Nome e telefono">
+      <div class="check"><input id="geo" type="checkbox"><label for="geo" style="margin:0;font-weight:400">Aggiungi la mia posizione attuale</label></div>
+      <p id="formErr" class="err" hidden></p>
+      <button id="sendBtn" class="primary" type="submit">Invia alla famiglia</button>
+      <p class="muted" style="margin-top:10px">Lo riceve solo la famiglia del cane. Il contatto lo vede solo lei.</p>
+    </form>
+    <div id="thanks" class="thanks" hidden>Grazie! La famiglia ha ricevuto la tua segnalazione.</div>
+  </section>
+
+  <footer>Allarme lanciato con <b>Doggy</b>, l'app per i cani del quartiere.</footer>
+</main>
+<script>
+  var SUPABASE_URL = 'https://tueratmtsvtmncewyyoh.supabase.co';
+  var SUPABASE_KEY = 'sb_publishable_9VizvtDsLw-CcECHhboKwQ_lNA_jgpX';
+  var params = new URLSearchParams(location.hash.slice(1));
+  var token = params.get('t');
+  var appUrl = params.get('u');
+  var data = null;
+
+  function rpc(fn, body) {
+    return fetch(SUPABASE_URL + '/rest/v1/rpc/' + fn, {
+      method: 'POST',
+      headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    }).then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.message || 'Errore'); return j; }); });
+  }
+  function el(id) { return document.getElementById(id); }
+  function since(iso) {
+    var d = new Date(iso), min = Math.round((Date.now() - d) / 60000);
+    if (min < 60) return min <= 1 ? 'da pochi minuti' : 'da ' + min + ' minuti';
+    var h = Math.round(min / 60);
+    if (h < 24) return h === 1 ? "da un'ora" : 'da ' + h + ' ore';
+    return 'dal ' + d.toLocaleDateString('it-IT', { day: 'numeric', month: 'long' }) + ' alle ' + d.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function show(l) {
+    data = l;
+    el('loading').hidden = true;
+    el('lost').hidden = false;
+    var open = l.status === 'smarrito';
+    document.title = (open ? 'Cane smarrito: ' : 'Ritrovato: ') + l.dog_name + ' · Doggy';
+    el('banner').textContent = open
+      ? '🚨 SMARRITO ' + since(l.lost_at) + (l.area_label ? ' · zona ' + l.area_label : '')
+      : (l.status === 'ritrovato' ? '🎉 ' + l.dog_name + ' è stato ritrovato. Grazie a chi ha aiutato!' : 'Allarme chiuso');
+    if (!open) el('banner').className = 'banner ok';
+    el('name').textContent = l.dog_name;
+    el('details').textContent = [l.breed, l.size ? 'taglia ' + l.size : null, l.sex].filter(Boolean).join(' · ');
+    if (l.photo) el('photo').src = SUPABASE_URL + '/storage/v1/object/public/lost-public/' + encodeURIComponent(l.photo);
+    else el('photo').style.display = 'none';
+    if (l.description) { el('descBox').hidden = false; el('desc').textContent = l.description; }
+    var d = 0.006;
+    el('map').src = 'https://www.openstreetmap.org/export/embed.html?bbox=' + (l.lng - d) + ',' + (l.lat - d) + ',' + (l.lng + d) + ',' + (l.lat + d) + '&layer=mapnik&marker=' + l.lat + ',' + l.lng;
+    if (open && l.phone) { el('call').hidden = false; el('call').href = 'tel:' + l.phone.replace(/ /g, ''); el('call').textContent = '📞 Chiama la famiglia: ' + l.phone; }
+    if (!open) { el('seenBtn').hidden = true; }
+    if (appUrl && /^(doggy|exp|exps):\/\//.test(appUrl)) { el('openApp').hidden = false; el('openApp').href = appUrl; }
+  }
+
+  if (!token) { el('loading').hidden = true; el('missing').hidden = false; }
+  else rpc('lost_dog_public', { p_token: token }).then(function (rows) {
+    if (!rows || !rows.length) { el('loading').hidden = true; el('missing').hidden = false; return; }
+    show(rows[0]);
+  }).catch(function () { el('loading').hidden = true; el('missing').hidden = false; });
+
+  el('seenBtn').onclick = function () { el('form').hidden = false; el('note').focus(); };
+  el('shareBtn').onclick = function () {
+    var text = '🚨 CANE SMARRITO: ' + (data ? data.dog_name : '') + (data && data.area_label ? ' · zona ' + data.area_label : '') + '. Se lo vedi, segnalalo qui:';
+    if (navigator.share) navigator.share({ title: document.title, text: text, url: location.href }).catch(function () {});
+    else if (navigator.clipboard) navigator.clipboard.writeText(text + ' ' + location.href).then(function () { alert('Link copiato'); });
+  };
+
+  el('form').onsubmit = function (e) {
+    e.preventDefault();
+    var note = el('note').value.trim();
+    el('formErr').hidden = true;
+    if (!note) { el('formErr').textContent = "Scrivi dove e quando l'hai visto."; el('formErr').hidden = false; return; }
+    el('sendBtn').disabled = true;
+    function send(lat, lng) {
+      rpc('lost_sighting_public', { p_token: token, p_note: note, p_contact: el('contact').value.trim() || null, p_lat: lat, p_lng: lng })
+        .then(function () { el('form').hidden = true; el('thanks').hidden = false; el('seenBtn').hidden = true; })
+        .catch(function (err) { el('formErr').textContent = err.message; el('formErr').hidden = false; el('sendBtn').disabled = false; });
+    }
+    if (el('geo').checked && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function (p) { send(p.coords.latitude, p.coords.longitude); },
+        function () { send(null, null); }, { timeout: 8000 });
+    } else send(null, null);
+  };
+</script>
+</body>
+</html>
