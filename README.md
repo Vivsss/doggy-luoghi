@@ -25,6 +25,7 @@ GitHub → **Actions** → **Aggiorna luoghi** → **Run workflow**.
 
 - `apri/`: la pagina "ponte" che apre i link di Doggy mandati su WhatsApp, SMS ed email.
 - `smarrito/`: la pagina di un **cane smarrito** (`smarrito/#t=<codice>`), da condividere anche con chi non ha Doggy: foto, dati, dove si è perso, "Chiama la famiglia" se ha scelto di mostrare il telefono, e "L'ho visto" per mandare una segnalazione. Usa solo le due funzioni del database pensate per chi non ha un account (`lost_dog_public`, `lost_sighting_public`) con la chiave pubblica dell'app.
+- `vicini/`: la pagina per chi riceve l'invito di un vicino ("Invita chi ha un cane qui vicino" nell'app): cos'è Doggy e, per chi ce l'ha già, il pulsante per aprirla.
 
 Prima del lancio queste pagine passano sul dominio `doggy-app.it`.
 

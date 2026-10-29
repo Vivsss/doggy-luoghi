@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Doggy · i cani del tuo quartiere</title>
+<meta property="og:title" content="Doggy · i cani del tuo quartiere">
+<meta property="og:description" content="Conosci i cani vicini, organizza passeggiate e avvisa il quartiere se un cane si perde.">
+<style>
+  /* Invito di un vicino (revisione del 30/10, step 11): chi riceve il link non ha ancora Doggy.
+     Stile Parco come la pagina apri/. Prima del lancio passa sul dominio doggy-app.it (GO-LIVE). */
+  :root { --prato:#1F6B4F; --foglia:#DDEBDF; --sabbia:#F4F0E6; --bosco:#1E2A24; --muted:#4A564F; --card:#fff; }
+  @media (prefers-color-scheme: dark) {
+    :root { --prato:#72C69D; --foglia:#1F3A2C; --sabbia:#121915; --bosco:#EDE8DC; --muted:#B2BAB3; --card:#1C2520; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+         background:var(--sabbia); color:var(--bosco); font-family:-apple-system, system-ui, "Segoe UI", Roboto, sans-serif; padding:24px 16px; }
+  main { width:100%; max-width:400px; background:var(--card); border-radius:20px; padding:32px 24px;
+         box-shadow:0 4px 24px rgba(30,42,36,.08); }
+  .logo { display:flex; align-items:center; gap:12px; justify-content:center; margin-bottom:20px; }
+  .mark { width:56px; height:56px; border-radius:50%; background:var(--foglia); border:2px solid var(--prato);
+          display:flex; align-items:center; justify-content:center; }
+  .word { font-size:40px; font-weight:800; letter-spacing:-1px; color:var(--prato); }
+  h1 { font-size:22px; margin:0 0 8px; text-align:center; }
+  p { color:var(--muted); line-height:1.45; margin:0 0 16px; }
+  ul { padding:0; margin:0 0 20px; list-style:none; }
+  li { display:flex; gap:10px; padding:8px 0; line-height:1.4; }
+  li span { flex:none; }
+  a.btn { display:block; text-align:center; background:var(--prato); color:var(--card); text-decoration:none; font-weight:600;
+          font-size:17px; padding:14px 18px; border-radius:14px; }
+  small { display:block; margin-top:18px; color:var(--muted); font-size:13px; line-height:1.4; text-align:center; }
+</style>
+</head>
+<body>
+<main>
+  <div class="logo" aria-label="Doggy">
+    <div class="mark" aria-hidden="true">
+      <svg width="28" height="28" viewBox="0 0 32 32" fill="currentColor" style="color:var(--prato)"><ellipse cx="7" cy="13" rx="3" ry="4"/><ellipse cx="12.5" cy="7" rx="3" ry="4"/><ellipse cx="19.5" cy="7" rx="3" ry="4"/><ellipse cx="25" cy="13" rx="3" ry="4"/><path d="M16 14c-5 0-9 5-9 9 0 3 2.5 4 5 4 1.6 0 2.6-.8 4-.8s2.4.8 4 .8c2.5 0 5-1 5-4 0-4-4-9-9-9z"/></svg>
+    </div>
+    <div class="word" aria-hidden="true">doggy</div>
+  </div>
+  <h1>Un vicino ti invita su Doggy</h1>
+  <p>Doggy è l'app dei cani del quartiere, per chi vive con un cane a Roma.</p>
+  <ul>
+    <li><span>🐕</span>Conosci i cani che abitano vicino a te e diventate amici</li>
+    <li><span>🌳</span>Organizza passeggiate e trova aree cani, parchi e veterinari</li>
+    <li><span>🚨</span>Se un cane si perde, lo sa subito tutto il quartiere</li>
+    <li><span>🔒</span>Mai la tua posizione reale: solo la zona, e ti vede solo chi si fa vedere</li>
+  </ul>
+  <a class="btn" id="open" href="#" style="display:none">Ho già Doggy: aprilo</a>
+  <small>Doggy è in prova in alcuni quartieri di Roma e arriva presto su App Store e Google Play.<br>
+    Vuoi provarlo prima? Chiedi a chi ti ha mandato questo link.</small>
+</main>
+<script>
+  // Dopo il # c'è il link dell'app (doggy:// o exp:// di Expo Go): per chi ha già Doggy
+  (function () {
+    var target = new URLSearchParams(location.hash.slice(1)).get('u') || '';
+    if (!/^(doggy|exps?):\/\//i.test(target)) return;
+    var btn = document.getElementById('open');
+    btn.href = target;
+    btn.style.display = 'block';
+  })();
+</script>
+</body>
+</html>
