@@ -60,8 +60,8 @@
     </div>
     <div id="descBox" class="card" hidden><p id="desc"></p></div>
     <div class="card" style="padding:8px">
-      <iframe id="map" title="Dove si è perso" loading="lazy"></iframe>
-      <p class="muted" style="padding:8px 8px 4px">Il segnaposto è il punto in cui si è perso.</p>
+      <iframe id="map" title="Dove si è perso o persa" loading="lazy"></iframe>
+      <p class="muted" style="padding:8px 8px 4px" id="mapNote">Il segnaposto è il punto in cui si è perso.</p>
     </div>
 
     <div id="actions" style="display:flex;flex-direction:column;gap:10px">
@@ -72,7 +72,7 @@
     </div>
 
     <form id="form" class="card" hidden>
-      <h2 style="margin:0 0 4px;font-size:20px">Dove e quando l'hai visto?</h2>
+      <h2 style="margin:0 0 4px;font-size:20px" id="formTitle">Dove e quando l'hai visto?</h2>
       <label for="note">Cosa hai visto</label>
       <textarea id="note" maxlength="300" placeholder="Es. 10 minuti fa in via Merulana, correva verso il parco"></textarea>
       <label for="contact">Come ti possono contattare (facoltativo)</label>
@@ -117,15 +117,18 @@
     return 'dal ' + d.toLocaleDateString('it-IT', { day: 'numeric', month: 'long' }) + ' alle ' + d.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
   }
 
+  // femminile o maschile, secondo il cane (30/10: "si è persa", non "si è perso")
+  function gx(m, f) { return data && data.sex === 'femmina' ? f : m; }
+
   function show(l) {
     data = l;
     el('loading').hidden = true;
     el('lost').hidden = false;
     var open = l.status === 'smarrito';
-    document.title = (open ? 'Cane smarrito: ' : 'Ritrovato: ') + l.dog_name + ' · Doggy';
+    document.title = (open ? 'Cane smarrito: ' : gx('Ritrovato: ', 'Ritrovata: ')) + l.dog_name + ' · Doggy';
     el('banner').textContent = open
-      ? '🚨 SMARRITO ' + since(l.lost_at) + (l.area_label ? ' · zona ' + l.area_label : '')
-      : (l.status === 'ritrovato' ? '🎉 ' + l.dog_name + ' è stato ritrovato. Grazie a chi ha aiutato!' : 'Allarme chiuso');
+      ? '🚨 ' + gx('SMARRITO ', 'SMARRITA ') + since(l.lost_at) + (l.area_label ? ' · zona ' + l.area_label : '')
+      : (l.status === 'ritrovato' ? '🎉 ' + l.dog_name + gx(' è stato ritrovato', ' è stata ritrovata') + '. Grazie a chi ha aiutato!' : 'Allarme chiuso');
     if (!open) el('banner').className = 'banner ok';
     el('name').textContent = l.dog_name;
     el('details').textContent = [l.breed, l.size ? 'taglia ' + l.size : null, l.sex].filter(Boolean).join(' · ');
@@ -136,6 +139,9 @@
     el('map').src = 'https://www.openstreetmap.org/export/embed.html?bbox=' + (l.lng - d) + ',' + (l.lat - d) + ',' + (l.lng + d) + ',' + (l.lat + d) + '&layer=mapnik&marker=' + l.lat + ',' + l.lng;
     if (open && l.phone) { el('call').hidden = false; el('call').href = 'tel:' + l.phone.replace(/ /g, ''); el('call').textContent = '📞 Chiama la famiglia: ' + l.phone; }
     if (!open) { el('seenBtn').hidden = true; }
+    el('seenBtn').textContent = gx("👀 L'ho visto", "👀 L'ho vista");
+    el('formTitle').textContent = gx("Dove e quando l'hai visto?", "Dove e quando l'hai vista?");
+    el('mapNote').textContent = gx('Il segnaposto è il punto in cui si è perso.', 'Il segnaposto è il punto in cui si è persa.');
     if (appUrl && /^(doggy|exp|exps):\/\//.test(appUrl)) { el('openApp').hidden = false; el('openApp').href = appUrl; }
   }
 
@@ -147,7 +153,7 @@
 
   el('seenBtn').onclick = function () { el('form').hidden = false; el('note').focus(); };
   el('shareBtn').onclick = function () {
-    var text = '🚨 CANE SMARRITO: ' + (data ? data.dog_name : '') + (data && data.area_label ? ' · zona ' + data.area_label : '') + '. Se lo vedi, segnalalo qui:';
+    var text = '🚨 ' + 'CANE SMARRITO: ' + (data ? data.dog_name : '') + (data && data.area_label ? ' · zona ' + data.area_label : '') + gx('. Se lo vedi, segnalalo qui:', '. Se la vedi, segnalala qui:');
     if (navigator.share) navigator.share({ title: document.title, text: text, url: location.href }).catch(function () {});
     else if (navigator.clipboard) navigator.clipboard.writeText(text + ' ' + location.href).then(function () { alert('Link copiato'); });
   };
@@ -156,7 +162,7 @@
     e.preventDefault();
     var note = el('note').value.trim();
     el('formErr').hidden = true;
-    if (!note) { el('formErr').textContent = "Scrivi dove e quando l'hai visto."; el('formErr').hidden = false; return; }
+    if (!note) { el('formErr').textContent = gx("Scrivi dove e quando l'hai visto.", "Scrivi dove e quando l'hai vista."); el('formErr').hidden = false; return; }
     el('sendBtn').disabled = true;
     function send(lat, lng) {
       rpc('lost_sighting_public', { p_token: token, p_note: note, p_contact: el('contact').value.trim() || null, p_lat: lat, p_lng: lng,
