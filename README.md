@@ -27,6 +27,8 @@ GitHub → **Actions** → **Aggiorna luoghi** → **Run workflow**.
 - `smarrito/`: la pagina di un **cane smarrito** (`smarrito/#t=<codice>`), da condividere anche con chi non ha Doggy: foto, dati, dove si è perso, "Chiama la famiglia" se ha scelto di mostrare il telefono, e "L'ho visto" per mandare una segnalazione. Usa solo le due funzioni del database pensate per chi non ha un account (`lost_dog_public`, `lost_sighting_public`) con la chiave pubblica dell'app.
 - `vicini/`: la pagina per chi riceve l'invito di un vicino ("Invita chi ha un cane qui vicino" nell'app): cos'è Doggy e, per chi ce l'ha già, il pulsante per aprirla.
 
+- `beta/`: la pagina per **diventare tester** (4/11), un solo link da mandare su WhatsApp: per Android il gruppo Google dei tester e il link del test di Google Play, per iPhone TestFlight. I link veri vanno al posto dei `#DA_...` quando ci sono gli account degli store.
+
 Prima del lancio queste pagine passano sul dominio `doggy-app.it`.
 
 ## Licenza dei dati
