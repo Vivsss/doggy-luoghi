@@ -12,8 +12,10 @@ addestramento, canili, fontanelle, sacchetti), estratti ogni settimana da OpenSt
 3. Il risultato (es. `roma.json`) viene pubblicato sul ramo **`dati`**, sempre con un solo commit.
 4. Il database di Doggy (Supabase) lo scarica il lunedì mattina e aggiorna la tabella dei luoghi.
 
-Le zone sono in `aree.json`: nome, file da produrre, file Geofabrik di partenza e rettangolo
-`[ovest, sud, est, nord]`. Per ora c'è solo **Roma**.
+Le zone sono in `aree.json`: nome, file da produrre, file Geofabrik di partenza e, per una città, il rettangolo
+`[ovest, sud, est, nord]`. **Dal 4/11 tutta Italia**, in 5 file che non si sovrappongono, uno per ogni parte di Geofabrik:
+`italia-centro.json`, `italia-nord-ovest.json`, `italia-nord-est.json`, `italia-sud.json`, `italia-isole.json`.
+Resta anche `roma.json` (il ritaglio di Roma), finché il database di prova non passa alle 5 parti (migrazione 069 di doggy-app).
 
 Il formato dei file è lo stesso delle risposte di Overpass: `{"elements": [{"type", "id", "lat", "lon", "tags"}]}`.
 

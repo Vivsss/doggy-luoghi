@@ -3,6 +3,41 @@
     "nome": "Roma",
     "file": "roma.json",
     "fonte": "https://download.geofabrik.de/europe/italy/centro-latest.osm.pbf",
-    "bbox": [12.23, 41.65, 12.86, 42.10]
+    "bbox": [
+      12.23,
+      41.65,
+      12.86,
+      42.1
+    ]
+  },
+  {
+    "nome": "Italia centro",
+    "file": "italia-centro.json",
+    "fonte": "https://download.geofabrik.de/europe/italy/centro-latest.osm.pbf",
+    "regioni": "Lazio, Toscana, Umbria, Marche"
+  },
+  {
+    "nome": "Italia nord-ovest",
+    "file": "italia-nord-ovest.json",
+    "fonte": "https://download.geofabrik.de/europe/italy/nord-ovest-latest.osm.pbf",
+    "regioni": "Piemonte, Valle d'Aosta, Liguria, Lombardia"
+  },
+  {
+    "nome": "Italia nord-est",
+    "file": "italia-nord-est.json",
+    "fonte": "https://download.geofabrik.de/europe/italy/nord-est-latest.osm.pbf",
+    "regioni": "Trentino-Alto Adige, Veneto, Friuli-Venezia Giulia, Emilia-Romagna"
+  },
+  {
+    "nome": "Italia sud",
+    "file": "italia-sud.json",
+    "fonte": "https://download.geofabrik.de/europe/italy/sud-latest.osm.pbf",
+    "regioni": "Abruzzo, Molise, Campania, Puglia, Basilicata, Calabria"
+  },
+  {
+    "nome": "Italia isole",
+    "file": "italia-isole.json",
+    "fonte": "https://download.geofabrik.de/europe/italy/isole-latest.osm.pbf",
+    "regioni": "Sicilia, Sardegna"
   }
 ]

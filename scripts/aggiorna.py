@@ -109,10 +109,15 @@ def prepara(area):
     ritaglio = base + "-ritaglio.osm.pbf"
     filtrato = base + "-filtrato.osm.pbf"
     geojson = base + ".geojsonseq"
-    w, s, e, n = area["bbox"]
-
-    run("osmium", "extract", "--bbox", f"{w},{s},{e},{n}", "--strategy", "smart", "--overwrite", "-o", ritaglio, pbf)
-    run("osmium", "tags-filter", "--overwrite", "-o", filtrato, ritaglio, *FILTRI)
+    if area.get("bbox"):
+        # una città: si ritaglia il suo rettangolo
+        w, s, e, n = area["bbox"]
+        run("osmium", "extract", "--bbox", f"{w},{s},{e},{n}", "--strategy", "smart", "--overwrite", "-o", ritaglio, pbf)
+        sorgente = ritaglio
+    else:
+        # 4/11: tutta la zona del file di Geofabrik (le 5 parti dell'Italia, che non si sovrappongono)
+        sorgente = pbf
+    run("osmium", "tags-filter", "--overwrite", "-o", filtrato, sorgente, *FILTRI)
     run("osmium", "export", "--overwrite", "-f", "geojsonseq", "-a", "type,id", "-o", geojson, filtrato)
 
     elementi = {}
