@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Doggy · i cani del tuo quartiere</title>
+<meta name="description" content="Doggy è l'app di quartiere per chi ha un cane: conosci i cani vicini, organizza passeggiate e, se un cane si perde, avvisa subito chi è qui intorno.">
+<meta property="og:title" content="Doggy · i cani del tuo quartiere">
+<meta property="og:description" content="Conosci i cani vicini, organizza passeggiate e avvisa il quartiere se un cane si perde.">
+<style>
+  /* Pagina iniziale di doggy-app.it (5/11). Stile Parco come le altre pagine pubbliche. */
+  :root { --prato:#1F6B4F; --foglia:#DDEBDF; --sabbia:#F4F0E6; --bosco:#1E2A24; --muted:#4A564F; --card:#fff; --sole:#F2A541; }
+  @media (prefers-color-scheme: dark) {
+    :root { --prato:#72C69D; --foglia:#1F3A2C; --sabbia:#121915; --bosco:#EDE8DC; --muted:#B2BAB3; --card:#1C2520; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--sabbia); color:var(--bosco); font-family:-apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+         line-height:1.5; padding:24px 16px 40px; }
+  main { max-width:560px; margin:0 auto; }
+  .card { background:var(--card); border-radius:20px; padding:32px 24px; box-shadow:0 4px 24px rgba(30,42,36,.08); }
+  .logo { display:flex; align-items:center; gap:12px; justify-content:center; margin-bottom:20px; }
+  .mark { width:64px; height:64px; border-radius:50%; background:var(--foglia); border:3px solid var(--prato);
+          display:flex; align-items:center; justify-content:center; }
+  .word { font-size:46px; font-weight:800; letter-spacing:-1px; color:var(--prato); }
+  h1 { font-size:26px; line-height:1.2; margin:0 0 10px; text-align:center; }
+  .lead { color:var(--muted); text-align:center; margin:0 0 24px; font-size:17px; }
+  ul { padding:0; margin:0 0 24px; list-style:none; }
+  li { display:flex; gap:12px; padding:10px 0; border-top:1px solid var(--foglia); }
+  li:first-child { border-top:0; }
+  li span { flex:none; font-size:22px; line-height:1.3; }
+  li b { display:block; }
+  li small { color:var(--muted); font-size:15px; }
+  a.btn { display:block; text-align:center; background:var(--prato); color:var(--card); text-decoration:none; font-weight:600;
+          font-size:17px; padding:14px 18px; border-radius:14px; }
+  .soon { text-align:center; color:var(--muted); font-size:14px; margin:12px 0 0; }
+  footer { text-align:center; color:var(--muted); font-size:13px; margin-top:20px; line-height:1.7; }
+  footer a { color:var(--prato); }
+</style>
+</head>
+<body>
+<main>
+  <div class="card">
+    <div class="logo" aria-label="Doggy">
+      <div class="mark" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor" style="color:var(--prato)"><ellipse cx="7" cy="13" rx="3" ry="4"/><ellipse cx="12.5" cy="7" rx="3" ry="4"/><ellipse cx="19.5" cy="7" rx="3" ry="4"/><ellipse cx="25" cy="13" rx="3" ry="4"/><path d="M16 14c-5 0-9 5-9 9 0 3 2.5 4 5 4 1.6 0 2.6-.8 4-.8s2.4.8 4 .8c2.5 0 5-1 5-4 0-4-4-9-9-9z"/></svg>
+      </div>
+      <div class="word" aria-hidden="true">doggy</div>
+    </div>
+    <h1>I cani del tuo quartiere</h1>
+    <p class="lead">L'app per chi vive con un cane: ci si conosce tra vicini, si esce insieme e ci si aiuta.</p>
+    <ul>
+      <li><span>🐕</span><div><b>I cani vicini a te</b><small>Vedi i cani che abitano in zona e diventate amici. Solo la zona, mai l'indirizzo: ti vede solo chi si fa vedere.</small></div></li>
+      <li><span>🌳</span><div><b>Passeggiate insieme</b><small>Organizza un giro al parco o unisciti a quelli vicini, con la chat del gruppo.</small></div></li>
+      <li><span>📍</span><div><b>Aree cani, parchi e fontanelle</b><small>In tutta Italia, insieme a veterinari, negozi e canili.</small></div></li>
+      <li><span>🚨</span><div><b>Se un cane si perde</b><small>L'allarme arriva subito a chi è qui intorno, anche a chi non ha l'app.</small></div></li>
+    </ul>
+    <a class="btn" href="beta/">Prova Doggy prima di tutti</a>
+    <p class="soon">Siamo in prova a Roma: presto su App Store e Google Play.</p>
+  </div>
+  <footer>
+    <a href="privacy/">Privacy</a> · <a href="condizioni/">Condizioni d'uso</a> · <a href="mailto:ciao@doggy-app.it">ciao@doggy-app.it</a><br>
+    Luoghi © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>
+  </footer>
+</main>
+</body>
+</html>

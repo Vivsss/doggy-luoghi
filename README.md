@@ -31,7 +31,10 @@ GitHub → **Actions** → **Aggiorna luoghi** → **Run workflow**.
 
 - `beta/`: la pagina per **diventare tester** (4/11), un solo link da mandare su WhatsApp: per Android il gruppo Google dei tester e il link del test di Google Play, per iPhone TestFlight. I link veri vanno al posto dei `#DA_...` quando ci sono gli account degli store.
 
-Prima del lancio queste pagine passano sul dominio `doggy-app.it`.
+- pagina iniziale (`index.html`), `privacy/` e `condizioni/` (5/11): le ultime due si generano dai documenti di doggy-app con `python3 scripts/pagine-legali.py ../doggy-app`, da rilanciare a ogni modifica della privacy policy o delle condizioni d'uso.
+- `img/`: il logo per le email di Doggy.
+
+**Dominio `doggy-app.it` (5/11):** le pagine passano su https://doggy-app.it con GitHub Pages. Servono i record DNS su OVH (4 record A verso GitHub, un CNAME `www` → `vivsss.github.io`, il TXT di verifica del dominio per l'account GitHub), poi il file `CNAME` in questo repository. I link interni delle pagine sono relativi, quindi funzionano sia qui sia sul dominio.
 
 ## Licenza dei dati
 
