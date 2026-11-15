@@ -34,7 +34,7 @@ GitHub → **Actions** → **Aggiorna luoghi** → **Run workflow**.
 - pagina iniziale (`index.html`), `privacy/` e `condizioni/` (5/11): le ultime due si generano dai documenti di doggy-app con `python3 scripts/pagine-legali.py ../doggy-app`, da rilanciare a ogni modifica della privacy policy o delle condizioni d'uso.
 - `img/`: il logo per le email di dogtown.
 
-**Dominio `doggy-app.it` (5/11):** le pagine passano su https://doggy-app.it con GitHub Pages. Servono i record DNS su OVH (4 record A verso GitHub, un CNAME `www` → `vivsss.github.io`, il TXT di verifica del dominio per l'account GitHub), poi il file `CNAME` in questo repository. I link interni delle pagine sono relativi, quindi funzionano sia qui sia sul dominio.
+**Dominio `dogtown-app.com` (5/11):** le pagine passano su https://dogtown-app.com con GitHub Pages. Servono i record DNS su OVH (4 record A verso GitHub, un CNAME `www` → `vivsss.github.io`, il TXT di verifica del dominio per l'account GitHub), poi il file `CNAME` in questo repository. I link interni delle pagine sono relativi, quindi funzionano sia qui sia sul dominio.
 
 ## Licenza dei dati
 
