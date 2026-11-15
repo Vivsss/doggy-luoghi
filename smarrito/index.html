@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Cane smarrito · Doggy</title>
+<title>Cane smarrito · dogtown</title>
 <!--
-  Pagina pubblica di un cane smarrito (app Doggy, migrazione 053).
+  Pagina pubblica di un cane smarrito (app dogtown, migrazione 053).
   Si apre con #t=<codice dell'allarme> (e &u=<link per aprirlo nell'app>).
   Legge e scrive solo attraverso due funzioni del database pensate per chi non ha un account:
   lost_dog_public (i dati dell'allarme) e lost_sighting_public ("L'ho visto").
@@ -67,7 +67,7 @@
     <div id="actions" style="display:flex;flex-direction:column;gap:10px">
       <a id="call" class="btn primary" hidden>📞 Chiama la famiglia</a>
       <button id="seenBtn" class="primary">👀 L'ho visto</button>
-      <a id="openApp" class="btn" hidden>Apri in Doggy</a>
+      <a id="openApp" class="btn" hidden>Apri in dogtown</a>
       <button id="shareBtn">Condividi per aiutare</button>
     </div>
 
@@ -90,7 +90,7 @@
     <div id="thanks" class="thanks" hidden>Grazie! La famiglia ha ricevuto la tua segnalazione.</div>
   </section>
 
-  <footer>Allarme lanciato con <b>Doggy</b>, l'app per i cani del quartiere.</footer>
+  <footer>Allarme lanciato con <b>dogtown</b>, l'app per i cani del quartiere.</footer>
 </main>
 <script>
   var SUPABASE_URL = 'https://tueratmtsvtmncewyyoh.supabase.co';
@@ -125,7 +125,7 @@
     el('loading').hidden = true;
     el('lost').hidden = false;
     var open = l.status === 'smarrito';
-    document.title = (open ? 'Cane smarrito: ' : gx('Ritrovato: ', 'Ritrovata: ')) + l.dog_name + ' · Doggy';
+    document.title = (open ? 'Cane smarrito: ' : gx('Ritrovato: ', 'Ritrovata: ')) + l.dog_name + ' · dogtown';
     el('banner').textContent = open
       ? '🚨 ' + gx('SMARRITO ', 'SMARRITA ') + since(l.lost_at) + (l.area_label ? ' · zona ' + l.area_label : '')
       : (l.status === 'ritrovato' ? '🎉 ' + l.dog_name + gx(' è stato ritrovato', ' è stata ritrovata') + '. Grazie a chi ha aiutato!' : 'Allarme chiuso');

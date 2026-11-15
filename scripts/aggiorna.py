@@ -1,8 +1,8 @@
-"""Prepara i luoghi di Doggy dai dati di OpenStreetMap.
+"""Prepara i luoghi di dogtown dai dati di OpenStreetMap.
 
 Per ogni zona in aree.json:
   1. scarica il file di Geofabrik (una volta sola se più zone usano lo stesso file);
-  2. ritaglia il rettangolo della zona e tiene solo i luoghi che interessano a Doggy (osmium);
+  2. ritaglia il rettangolo della zona e tiene solo i luoghi che interessano a dogtown (osmium);
   3. scrive uscita/<file>.json nello stesso formato di Overpass ({"elements": [...]}),
      così il database lo legge con lo stesso codice.
 

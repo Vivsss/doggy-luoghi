@@ -1,4 +1,4 @@
-"""Pagine pubbliche della privacy policy e delle condizioni d'uso di Doggy (5/11).
+"""Pagine pubbliche della privacy policy e delle condizioni d'uso di dogtown (5/11).
 
 Le scrive da docs/PRIVACY-POLICY.md e docs/CONDIZIONI-USO.md del repository doggy-app, togliendo le note per il
 team (citazioni iniziali, sezioni "da verificare con il legale"). Da rilanciare a ogni modifica dei due documenti:
@@ -56,18 +56,18 @@ def pagina(titolo, intro, corpo_md):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{html.escape(titolo)} · Doggy</title>
-<meta name="description" content="{html.escape(titolo)} dell'app Doggy, la community dei cani di quartiere.">
+<title>{html.escape(titolo)} · dogtown</title>
+<meta name="description" content="{html.escape(titolo)} dell'app dogtown, la community dei cani di quartiere.">
 <style>{STYLE}</style>
 </head>
 <body>
 <main>
-  <header><a href="../" aria-label="Doggy, pagina iniziale"><span class="mark">{PAW}</span><span class="word">doggy</span></a></header>
+  <header><a href="../" aria-label="dogtown, pagina iniziale"><span class="mark">{PAW}</span><span class="word">dogtown</span></a></header>
   <h1>{html.escape(titolo)}</h1>
   {intro}
   {corpo}
 </main>
-<footer>Doggy · <a href="../privacy/">Privacy</a> · <a href="../condizioni/">Condizioni d'uso</a> · <a href="mailto:ciao@doggy-app.it">ciao@doggy-app.it</a><br>
+<footer>dogtown · <a href="../privacy/">Privacy</a> · <a href="../condizioni/">Condizioni d'uso</a> · <a href="mailto:ciao@doggy-app.it">ciao@doggy-app.it</a><br>
 <!-- generata da scripts/pagine-legali.py: non modificare a mano --></footer>
 </body>
 </html>
@@ -101,7 +101,7 @@ def main():
     cond = sezioni(senza_note(cond), da="## Chi può iscriversi", fino="## Da decidere e da verificare con il legale")
     intro_c = ('<p class="meta">Versione per la prova dell\'app (beta). Va rivista da un legale prima dell\'uscita '
                'pubblica sugli store.</p>'
-               '<p>Queste sono le regole che accetti quando ti iscrivi a Doggy. Chi crea il profilo di un cane ne accetta '
+               '<p>Queste sono le regole che accetti quando ti iscrivi a dogtown. Chi crea il profilo di un cane ne accetta '
                'in più gli impegni del referente. Come trattiamo i tuoi dati lo spiega la <a href="../privacy/">privacy '
                'policy</a>.</p>')
     with open(os.path.join(ROOT, "condizioni/index.html"), "w", encoding="utf-8") as f:

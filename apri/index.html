@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Apri in Doggy</title>
+<title>Apri in dogtown</title>
 <style>
   :root { --prato:#1F6B4F; --foglia:#DDEBDF; --sabbia:#F4F0E6; --bosco:#1E2A24; --muted:#4A564F; }
   * { box-sizing: border-box; }
@@ -24,14 +24,14 @@
 <body>
 <main>
   <div class="logo" aria-hidden="true">🐾</div>
-  <h1 id="title">Apri in Doggy</h1>
-  <p id="text">Stiamo aprendo Doggy… Se non si apre da solo, tocca il pulsante.</p>
-  <a class="btn" id="open" href="#">Apri in Doggy</a>
-  <small>Non hai ancora Doggy? Presto su App Store e Google Play.</small>
+  <h1 id="title">Apri in dogtown</h1>
+  <p id="text">Stiamo aprendo dogtown… Se non si apre da solo, tocca il pulsante.</p>
+  <a class="btn" id="open" href="#">Apri in dogtown</a>
+  <small>Non hai ancora dogtown? Presto su App Store e Google Play.</small>
 </main>
 <script>
   // Il link vero dell'app è dopo il # (es. #u=exp%3A%2F%2F…/--/passeggiata/…):
-  // dopo il # non arriva al server. Si aprono solo link di Doggy (doggy://)
+  // dopo il # non arriva al server. Si aprono solo link di dogtown (doggy://)
   // o di Expo Go (exp://, exps://), mai altri siti.
   (function () {
     var params = new URLSearchParams(location.hash.slice(1));
@@ -39,7 +39,7 @@
     var btn = document.getElementById('open');
     if (!/^(doggy|exps?):\/\//i.test(target)) {
       document.getElementById('title').textContent = 'Link non valido';
-      document.getElementById('text').textContent = 'Questo link non apre nulla in Doggy. Chiedi a chi te l\'ha mandato di inviarlo di nuovo.';
+      document.getElementById('text').textContent = 'Questo link non apre nulla in dogtown. Chiedi a chi te l\'ha mandato di inviarlo di nuovo.';
       btn.style.display = 'none';
       return;
     }

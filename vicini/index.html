@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Doggy · i cani del tuo quartiere</title>
-<meta property="og:title" content="Doggy · i cani del tuo quartiere">
+<title>dogtown · i cani del tuo quartiere</title>
+<meta property="og:title" content="dogtown · i cani del tuo quartiere">
 <meta property="og:description" content="Conosci i cani vicini, organizza passeggiate e avvisa il quartiere se un cane si perde.">
 <style>
-  /* Invito di un vicino (revisione del 30/10, step 11): chi riceve il link non ha ancora Doggy.
+  /* Invito di un vicino (revisione del 30/10, step 11): chi riceve il link non ha ancora dogtown.
      Stile Parco come la pagina apri/. Prima del lancio passa sul dominio doggy-app.it (GO-LIVE). */
   :root { --prato:#1F6B4F; --foglia:#DDEBDF; --sabbia:#F4F0E6; --bosco:#1E2A24; --muted:#4A564F; --card:#fff; }
   @media (prefers-color-scheme: dark) {
@@ -35,26 +35,26 @@
 </head>
 <body>
 <main>
-  <div class="logo" aria-label="Doggy">
+  <div class="logo" aria-label="dogtown">
     <div class="mark" aria-hidden="true">
       <svg width="28" height="28" viewBox="0 0 32 32" fill="currentColor" style="color:var(--prato)"><ellipse cx="7" cy="13" rx="3" ry="4"/><ellipse cx="12.5" cy="7" rx="3" ry="4"/><ellipse cx="19.5" cy="7" rx="3" ry="4"/><ellipse cx="25" cy="13" rx="3" ry="4"/><path d="M16 14c-5 0-9 5-9 9 0 3 2.5 4 5 4 1.6 0 2.6-.8 4-.8s2.4.8 4 .8c2.5 0 5-1 5-4 0-4-4-9-9-9z"/></svg>
     </div>
-    <div class="word" aria-hidden="true">doggy</div>
+    <div class="word" aria-hidden="true">dogtown</div>
   </div>
-  <h1>Un vicino ti invita su Doggy</h1>
-  <p>Doggy è l'app dei cani del quartiere, per chi vive con un cane a Roma.</p>
+  <h1>Un vicino ti invita su dogtown</h1>
+  <p>dogtown è l'app dei cani del quartiere, per chi vive con un cane a Roma.</p>
   <ul>
     <li><span>🐕</span>Conosci i cani che abitano vicino a te e diventate amici</li>
     <li><span>🌳</span>Organizza passeggiate e trova aree cani, parchi e veterinari</li>
     <li><span>🚨</span>Se un cane si perde, lo sa subito tutto il quartiere</li>
     <li><span>🔒</span>Mai la tua posizione reale: solo la zona, e ti vede solo chi si fa vedere</li>
   </ul>
-  <a class="btn" id="open" href="#" style="display:none">Ho già Doggy: aprilo</a>
-  <small>Doggy è in prova in alcuni quartieri di Roma e arriva presto su App Store e Google Play.<br>
+  <a class="btn" id="open" href="#" style="display:none">Ho già dogtown: aprilo</a>
+  <small>dogtown è in prova in alcuni quartieri di Roma e arriva presto su App Store e Google Play.<br>
     Vuoi provarlo prima? Chiedi a chi ti ha mandato questo link.</small>
 </main>
 <script>
-  // Dopo il # c'è il link dell'app (doggy:// o exp:// di Expo Go): per chi ha già Doggy
+  // Dopo il # c'è il link dell'app (doggy:// o exp:// di Expo Go): per chi ha già dogtown
   (function () {
     var target = new URLSearchParams(location.hash.slice(1)).get('u') || '';
     if (!/^(doggy|exps?):\/\//i.test(target)) return;
