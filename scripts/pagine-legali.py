@@ -67,7 +67,7 @@ def pagina(titolo, intro, corpo_md):
   {intro}
   {corpo}
 </main>
-<footer>dogtown · <a href="../privacy/">Privacy</a> · <a href="../condizioni/">Condizioni d'uso</a> · <a href="mailto:ciao@dogtown-app.com">ciao@dogtown-app.com</a><br>
+<footer>dogtown · <a href="../privacy/">Privacy</a> · <a href="../condizioni/">Condizioni d'uso</a> · <a href="mailto:hello@dogtown-app.com">hello@dogtown-app.com</a><br>
 <!-- generata da scripts/pagine-legali.py: non modificare a mano --></footer>
 </body>
 </html>
