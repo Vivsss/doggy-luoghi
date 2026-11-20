@@ -28,7 +28,8 @@ STYLE = """
   header a { display:flex; align-items:center; gap:10px; text-decoration:none; }
   .mark { width:40px; height:40px; border-radius:50%; background:var(--foglia); border:2px solid var(--prato);
           display:flex; align-items:center; justify-content:center; }
-  .word { font-size:28px; font-weight:800; letter-spacing:-.5px; color:var(--prato); }
+  @font-face { font-family:'DogtownLogo'; src:url('/fonts/dogtown-logo.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:swap; }
+  .word { font-family:'DogtownLogo', 'Bricolage Grotesque', system-ui, sans-serif; font-synthesis:none; font-size:28px; font-weight:700; letter-spacing:-.5px; color:var(--prato); }
   h1 { font-size:26px; line-height:1.2; margin:16px 0 6px; }
   h2 { font-size:20px; margin:32px 0 8px; color:var(--prato); }
   h3 { font-size:17px; margin:24px 0 6px; }

@@ -21,7 +21,8 @@
   .logo { display:flex; align-items:center; gap:12px; justify-content:center; margin-bottom:20px; }
   .mark { width:64px; height:64px; border-radius:50%; background:var(--foglia); border:3px solid var(--prato);
           display:flex; align-items:center; justify-content:center; }
-  .word { font-size:46px; font-weight:800; letter-spacing:-1px; color:var(--prato); }
+  @font-face { font-family:'DogtownLogo'; src:url('/fonts/dogtown-logo.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:swap; }
+  .word { font-family:'DogtownLogo', 'Bricolage Grotesque', system-ui, sans-serif; font-synthesis:none; font-size:46px; font-weight:700; letter-spacing:-1px; color:var(--prato); }
   h1 { font-size:26px; line-height:1.2; margin:0 0 10px; text-align:center; }
   .lead { color:var(--muted); text-align:center; margin:0 0 24px; font-size:17px; }
   ul { padding:0; margin:0 0 24px; list-style:none; }
