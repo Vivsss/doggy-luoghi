@@ -13,6 +13,8 @@ import json
 import os
 import subprocess
 import sys
+import time
+import urllib.error
 import urllib.request
 from datetime import datetime, timezone
 
@@ -91,16 +93,30 @@ def run(*args):
 def scarica(url):
     os.makedirs(LAVORO, exist_ok=True)
     destinazione = os.path.join(LAVORO, os.path.basename(url))
-    if not os.path.exists(destinazione):
-        print(f"Scarico {url}", flush=True)
-        richiesta = urllib.request.Request(url, headers={"User-Agent": "DoggyApp/0.1 (luoghi per proprietari di cani)"})
-        with urllib.request.urlopen(richiesta) as risposta, open(destinazione, "wb") as f:
-            while True:
-                blocco = risposta.read(1 << 20)
-                if not blocco:
-                    break
-                f.write(blocco)
-    return destinazione
+    if os.path.exists(destinazione):
+        return destinazione
+    # 21/11: il 16/11 il download è fallito per un errore di rete passeggero ("Network is unreachable"):
+    # si riprova fino a 5 volte, aspettando sempre di più
+    for tentativo in range(1, 6):
+        try:
+            print(f"Scarico {url} (tentativo {tentativo})", flush=True)
+            richiesta = urllib.request.Request(
+                url, headers={"User-Agent": "DoggyApp/0.1 (luoghi per proprietari di cani)"}
+            )
+            with urllib.request.urlopen(richiesta, timeout=120) as risposta, open(destinazione, "wb") as f:
+                while True:
+                    blocco = risposta.read(1 << 20)
+                    if not blocco:
+                        break
+                    f.write(blocco)
+            return destinazione
+        except (OSError, urllib.error.URLError) as errore:
+            print(f"Download non riuscito: {errore}", flush=True)
+            if os.path.exists(destinazione):
+                os.remove(destinazione)
+            if tentativo == 5:
+                raise
+            time.sleep(30 * tentativo)
 
 
 def prepara(area):
