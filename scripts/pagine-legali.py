@@ -58,8 +58,8 @@ def pagina(titolo, intro, corpo_md):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>dogtown - {html.escape(titolo.lower())}</title>
-<link rel="icon" type="image/png" href="../img/favicon.png">
-<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="../img/favicon.png?v=2">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png?v=2">
 <meta name="description" content="{html.escape(titolo)} dell'app dogtown, la community dei cani di quartiere.">
 <style>{STYLE}</style>
 </head>
