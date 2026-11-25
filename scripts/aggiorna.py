@@ -25,7 +25,7 @@ USCITA = os.path.join(ROOT, "uscita")
 # Cosa cerchiamo in OpenStreetMap (come la query Overpass della migrazione 013)
 FILTRI = [
     "nwr/leisure=dog_park,park",
-    "nwr/amenity=veterinary,animal_boarding,animal_training,animal_shelter,drinking_water",
+    "nwr/amenity=veterinary,animal_boarding,animal_training,animal_shelter,animal_breeding,drinking_water",
     "nwr/shop=pet,pet_grooming",
     "nwr/vending=excrement_bags",
     "nwr/waste",
@@ -35,7 +35,7 @@ FILTRI = [
 TAG_UTILI = {
     "name", "leisure", "amenity", "shop", "vending", "waste",
     "addr:street", "addr:housenumber", "opening_hours",
-    "phone", "contact:phone", "website", "contact:website", "dog",
+    "phone", "contact:phone", "website", "contact:website", "dog", "animal_breeding",
 }
 
 
@@ -55,6 +55,13 @@ def tipo(t):
         return "addestramento"
     if t.get("amenity") == "animal_shelter":
         return "canile"
+    # 25/11: allevamenti di cani (solo con il cane tra gli animali allevati e con un nome)
+    if (
+        t.get("amenity") == "animal_breeding"
+        and "dog" in [x.strip() for x in t.get("animal_breeding", "").split(";")]
+        and t.get("name", "").strip()
+    ):
+        return "allevamento"
     if t.get("amenity") == "drinking_water":
         return "fontanella"
     if t.get("vending") == "excrement_bags" or "dog_excrement" in t.get("waste", ""):
