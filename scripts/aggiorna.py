@@ -55,12 +55,8 @@ def tipo(t):
         return "addestramento"
     if t.get("amenity") == "animal_shelter":
         return "canile"
-    # 25/11: allevamenti di cani (solo con il cane tra gli animali allevati e con un nome)
-    if (
-        t.get("amenity") == "animal_breeding"
-        and "dog" in [x.strip() for x in t.get("animal_breeding", "").split(";")]
-        and t.get("name", "").strip()
-    ):
+    # 25/11: allevamenti di cani (solo con il cane tra gli animali allevati; senza nome si chiamano "Allevamento")
+    if t.get("amenity") == "animal_breeding" and "dog" in [x.strip() for x in t.get("animal_breeding", "").split(";")]:
         return "allevamento"
     if t.get("amenity") == "drinking_water":
         return "fontanella"
