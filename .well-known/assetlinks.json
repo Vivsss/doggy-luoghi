@@ -1,0 +1,14 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "it.dogtown.app",
+      "sha256_cert_fingerprints": [
+        "F5:CB:75:E9:6F:A7:46:45:7F:D6:27:0D:A0:E7:87:5D:BB:43:06:3F:CF:77:A8:E2:0D:15:BE:C9:4F:64:71:E1",
+        "09:83:A6:D5:E2:1B:36:58:CF:18:2B:85:70:E3:2E:85:13:7D:94:46:B5:6C:78:C6:AB:D3:4C:9D:10:10:F7:96",
+        "E3:DF:34:2C:27:B2:4A:E4:9D:CB:8C:34:04:93:83:1B:9F:BA:FD:F7:99:0B:9A:F6:10:AF:61:41:0F:E4:B1:57"
+      ]
+    }
+  }
+]

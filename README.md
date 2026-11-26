@@ -25,6 +25,7 @@ GitHub → **Actions** → **Aggiorna luoghi** → **Run workflow**.
 
 ## Pagine pubbliche dell'app (GitHub Pages)
 
+- `.well-known/assetlinks.json` (e, per iPhone, `apple-app-site-association`): dicono ad Android (e iPhone) che l'app dogtown può aprire i link `https://dogtown-app.com/apri/` e `/vicini/` (app links). Il file `.nojekyll` serve a GitHub Pages per pubblicare le cartelle che iniziano con un punto.
 - `apri/`: la pagina "ponte" che apre i link di dogtown mandati su WhatsApp, SMS ed email.
 - `smarrito/`: la pagina di un **cane smarrito** (`smarrito/#t=<codice>`), da condividere anche con chi non ha dogtown: foto, dati, dove si è perso, "Chiama la famiglia" se ha scelto di mostrare il telefono, e "L'ho visto" per mandare una segnalazione. Usa solo le due funzioni del database pensate per chi non ha un account (`lost_dog_public`, `lost_sighting_public`) con la chiave pubblica dell'app.
 - `vicini/`: la pagina per chi riceve l'invito di un vicino ("Invita chi ha un cane qui vicino" nell'app): cos'è dogtown e, per chi ce l'ha già, il pulsante per aprirla.
