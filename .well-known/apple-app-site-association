@@ -1,0 +1,10 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["HB9PWGMWUP.it.dogtown.app"],
+        "components": [{ "/": "/apri/*" }, { "/": "/vicini/*" }]
+      }
+    ]
+  }
+}
