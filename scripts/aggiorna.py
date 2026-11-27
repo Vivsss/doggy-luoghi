@@ -137,6 +137,20 @@ def scarica(url):
             print(f"Download non riuscito: {errore}", flush=True)
             if os.path.exists(destinazione):
                 os.remove(destinazione)
+            # 27/11: "Network is unreachable" può essere la rete IPv6 del server: ripiego con curl solo su IPv4
+            try:
+                print("Riprovo con curl su IPv4", flush=True)
+                subprocess.run(
+                    ["curl", "-4", "-L", "--fail", "--silent", "--show-error", "--connect-timeout", "30",
+                     "--retry", "2", "-A", "DoggyApp/0.1 (luoghi per proprietari di cani)", "-o", destinazione, url],
+                    check=True,
+                    timeout=1800,
+                )
+                return destinazione
+            except (subprocess.SubprocessError, OSError) as e2:
+                print(f"Anche curl non è riuscito: {e2}", flush=True)
+                if os.path.exists(destinazione):
+                    os.remove(destinazione)
             if tentativo == 8:
                 raise
             time.sleep(min(30 * tentativo, 120))
