@@ -119,8 +119,8 @@ def scarica(url):
     if os.path.exists(destinazione):
         return destinazione
     # 21/11: il 16/11 il download è fallito per un errore di rete passeggero ("Network is unreachable"):
-    # si riprova fino a 5 volte, aspettando sempre di più
-    for tentativo in range(1, 6):
+    # si riprova fino a 8 volte, aspettando sempre di più (27/11: di nuovo "Network is unreachable")
+    for tentativo in range(1, 9):
         try:
             print(f"Scarico {url} (tentativo {tentativo})", flush=True)
             richiesta = urllib.request.Request(
@@ -137,9 +137,9 @@ def scarica(url):
             print(f"Download non riuscito: {errore}", flush=True)
             if os.path.exists(destinazione):
                 os.remove(destinazione)
-            if tentativo == 5:
+            if tentativo == 8:
                 raise
-            time.sleep(30 * tentativo)
+            time.sleep(min(30 * tentativo, 120))
 
 
 def prepara(area):
