@@ -11,6 +11,7 @@ Uso: python3 scripts/aggiorna.py   (serve osmium-tool installato)
 
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -37,6 +38,25 @@ TAG_UTILI = {
     "addr:street", "addr:housenumber", "opening_hours",
     "phone", "contact:phone", "website", "contact:website", "dog", "animal_breeding",
 }
+
+# 27/11: in OpenStreetMap molte colonie feline sono segnate come rifugi per animali (amenity=animal_shelter).
+# In un'app per proprietari di cani non servono: si tolgono i rifugi che sono chiaramente solo per gatti.
+# Un rifugio misto (cani e gatti) o senza indicazioni sugli animali resta.
+PAROLE_GATTI = re.compile(r"gatt|felin|\bcats?\b|\bkitten|micio|mici\b", re.IGNORECASE)
+PAROLE_CANI = re.compile(r"\bcan[ei]\b|canil|\bdogs?\b|cagnolin|cucciol", re.IGNORECASE)
+CHIAVI_ANIMALI = ("animal", "animal_shelter", "animal_shelter:animal", "species")
+
+
+def solo_gatti(t):
+    """True se il rifugio è chiaramente solo per gatti (tag degli animali, nome o sito)."""
+    if t.get("amenity") != "animal_shelter":
+        return False
+    animali = ";".join(t.get(k, "") for k in CHIAVI_ANIMALI).lower()
+    if animali.strip(";"):
+        # i tag dicono quali animali: solo gatti se c'è il gatto e non il cane
+        return bool(re.search(r"\bcats?\b|gatt", animali)) and not re.search(r"\bdogs?\b|\bcan[ei]\b", animali)
+    testo = " ".join(t.get(k, "") for k in ("name", "website", "contact:website"))
+    return bool(PAROLE_GATTI.search(testo)) and not PAROLE_CANI.search(testo)
 
 
 def tipo(t):
@@ -140,6 +160,7 @@ def prepara(area):
     run("osmium", "export", "--overwrite", "-f", "geojsonseq", "-a", "type,id", "-o", geojson, filtrato)
 
     elementi = {}
+    tolti_gatti = []
     with open(geojson, encoding="utf-8") as f:
         for riga in f:
             riga = riga.strip().lstrip("\x1e")
@@ -149,6 +170,9 @@ def prepara(area):
             props = feature.get("properties") or {}
             tags = {k: v for k, v in props.items() if not k.startswith("@")}
             if tipo(tags) is None:
+                continue
+            if solo_gatti(tags):
+                tolti_gatti.append(tags.get("name") or tags.get("website") or "(senza nome)")
                 continue
             punto = centro(feature["geometry"])
             if punto is None:
@@ -181,6 +205,10 @@ def prepara(area):
         k = tipo(el["tags"])
         conteggio[k] = conteggio.get(k, 0) + 1
     print(f"{area['nome']}: {len(risultato['elements'])} luoghi {conteggio}", flush=True)
+    if tolti_gatti:
+        print(f"Rifugi solo per gatti tolti: {len(tolti_gatti)}", flush=True)
+        for nome in sorted(tolti_gatti)[:40]:
+            print(f"  - {nome}", flush=True)
     return len(risultato["elements"])
 
 
