@@ -58,7 +58,7 @@ def motivo_solo_gatti(t):
     if specie:
         # i tag dicono quali animali accoglie il rifugio: resta solo se c'è il cane (o un'indicazione generica che lo
         # può comprendere); un rifugio di soli gatti o di altre specie (es. un'oasi con capre e conigli) si toglie
-        if any(re.search(r"dog|can[ei]\b|canin|animal|\ball\b|\bany\b|\bpets?\b|stray|randag|domestic|abandon|mammal", x) for x in specie):
+        if any(re.search(r"dog|can[ei]\b|canin|animal|\ball\b|\bany\b|\bpets?\b|stray|randag|domestic|abandon|^mammals?$", x) for x in specie):
             return None
         return f"tag: senza cani ({';'.join(specie)})"
     testo = " ".join(t.get(k, "") for k in ("name", "website", "contact:website"))
