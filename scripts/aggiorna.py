@@ -234,7 +234,7 @@ def prepara(area):
         conteggio[k] = conteggio.get(k, 0) + 1
     print(f"{area['nome']}: {len(risultato['elements'])} luoghi {conteggio}", flush=True)
     if tolti_gatti:
-        print(f"Rifugi solo per gatti tolti: {len(tolti_gatti)}", flush=True)
+        print(f"Rifugi senza cani tolti: {len(tolti_gatti)}", flush=True)
         for nome in sorted(tolti_gatti)[:40]:
             print(f"  - {nome}", flush=True)
     return len(risultato["elements"])
