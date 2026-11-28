@@ -42,21 +42,30 @@ TAG_UTILI = {
 # 27/11: in OpenStreetMap molte colonie feline sono segnate come rifugi per animali (amenity=animal_shelter).
 # In un'app per proprietari di cani non servono: si tolgono i rifugi che sono chiaramente solo per gatti.
 # Un rifugio misto (cani e gatti) o senza indicazioni sugli animali resta.
-PAROLE_GATTI = re.compile(r"gatt|felin|\bcats?\b|\bkitten|micio|mici\b", re.IGNORECASE)
+PAROLE_GATTI = re.compile(r"gatt|felin|\bcats?\b|\bkitten|\bmici\b|\bmicio\b", re.IGNORECASE)
 PAROLE_CANI = re.compile(r"\bcan[ei]\b|canil|\bdogs?\b|cagnolin|cucciol", re.IGNORECASE)
 CHIAVI_ANIMALI = ("animal", "animal_shelter", "animal_shelter:animal", "species")
 
 
-def solo_gatti(t):
-    """True se il rifugio è chiaramente solo per gatti (tag degli animali, nome o sito)."""
+def motivo_solo_gatti(t):
+    """Perché il rifugio è solo per gatti ('tag: ...' oppure 'nome/sito'), o None se non lo è."""
     if t.get("amenity") != "animal_shelter":
-        return False
+        return None
     animali = ";".join(t.get(k, "") for k in CHIAVI_ANIMALI).lower()
     if animali.strip(";"):
         # i tag dicono quali animali: solo gatti se c'è il gatto e non il cane
-        return bool(re.search(r"\bcats?\b|gatt", animali)) and not re.search(r"\bdogs?\b|\bcan[ei]\b", animali)
+        if re.search(r"\bcats?\b|gatt", animali) and not re.search(r"\bdogs?\b|\bcan[ei]\b", animali):
+            return f"tag: {animali.strip(';')}"
+        return None
     testo = " ".join(t.get(k, "") for k in ("name", "website", "contact:website"))
-    return bool(PAROLE_GATTI.search(testo)) and not PAROLE_CANI.search(testo)
+    if PAROLE_GATTI.search(testo) and not PAROLE_CANI.search(testo):
+        return "nome/sito"
+    return None
+
+
+def solo_gatti(t):
+    """True se il rifugio è chiaramente solo per gatti (tag degli animali, nome o sito)."""
+    return motivo_solo_gatti(t) is not None
 
 
 def tipo(t):
@@ -185,8 +194,9 @@ def prepara(area):
             tags = {k: v for k, v in props.items() if not k.startswith("@")}
             if tipo(tags) is None:
                 continue
-            if solo_gatti(tags):
-                tolti_gatti.append(tags.get("name") or tags.get("website") or "(senza nome)")
+            motivo = motivo_solo_gatti(tags)
+            if motivo:
+                tolti_gatti.append(f"{tags.get('name') or tags.get('website') or '(senza nome)'}  [{motivo}]")
                 continue
             punto = centro(feature["geometry"])
             if punto is None:
