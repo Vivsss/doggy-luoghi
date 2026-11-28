@@ -52,10 +52,12 @@ def motivo_solo_gatti(t):
     if t.get("amenity") != "animal_shelter":
         return None
     animali = ";".join(t.get(k, "") for k in CHIAVI_ANIMALI).lower()
-    if animali.strip(";"):
-        # i tag dicono quali animali: solo gatti se c'è il gatto e non il cane
-        if re.search(r"\bcats?\b|gatt", animali) and not re.search(r"\bdogs?\b|\bcan[ei]\b", animali):
-            return f"tag: {animali.strip(';')}"
+    # un tag generico ("yes") non dice niente sugli animali
+    specie = [x.strip() for x in re.split(r"[;,]", animali) if x.strip() and x.strip() not in ("yes", "designated")]
+    if specie:
+        # i tag dicono quali animali: si toglie solo se sono tutti gatti (un'oasi con capre, conigli e un gatto resta)
+        if all(re.fullmatch(r"cats?|gatt[oi]", x) for x in specie):
+            return f"tag: {';'.join(specie)}"
         return None
     testo = " ".join(t.get(k, "") for k in ("name", "website", "contact:website"))
     if PAROLE_GATTI.search(testo) and not PAROLE_CANI.search(testo):
