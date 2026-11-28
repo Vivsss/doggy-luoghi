@@ -58,7 +58,7 @@ def motivo_solo_gatti(t):
     if specie:
         # i tag dicono quali animali accoglie il rifugio: resta solo se c'è il cane (o un'indicazione generica che lo
         # può comprendere); un rifugio di soli gatti o di altre specie (es. un'oasi con capre e conigli) si toglie
-        if any(re.fullmatch(r"dogs?|cani?|canin[oi]|animals?|all|any|pets?|stray(_animals?)?|strays?|randagi", x) for x in specie):
+        if any(re.search(r"dog|can[ei]\b|canin|animal|\ball\b|\bany\b|\bpets?\b|stray|randag|domestic|abandon|mammal", x) for x in specie):
             return None
         return f"tag: senza cani ({';'.join(specie)})"
     testo = " ".join(t.get(k, "") for k in ("name", "website", "contact:website"))
@@ -235,7 +235,7 @@ def prepara(area):
     print(f"{area['nome']}: {len(risultato['elements'])} luoghi {conteggio}", flush=True)
     if tolti_gatti:
         print(f"Rifugi senza cani tolti: {len(tolti_gatti)}", flush=True)
-        for nome in sorted(tolti_gatti)[:40]:
+        for nome in sorted(tolti_gatti)[:150]:
             print(f"  - {nome}", flush=True)
     return len(risultato["elements"])
 
