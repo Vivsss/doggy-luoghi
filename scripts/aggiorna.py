@@ -40,8 +40,9 @@ TAG_UTILI = {
 }
 
 # 27/11: in OpenStreetMap molte colonie feline sono segnate come rifugi per animali (amenity=animal_shelter).
-# In un'app per proprietari di cani non servono: si tolgono i rifugi che sono chiaramente solo per gatti.
-# Un rifugio misto (cani e gatti) o senza indicazioni sugli animali resta.
+# In un'app per proprietari di cani non servono: si tolgono i rifugi che per i tag non accolgono cani (solo gatti o
+# altre specie) e, senza tag sugli animali, quelli che dal nome sono solo per gatti. Un rifugio con il cane (anche
+# insieme ai gatti) o senza indicazioni resta.
 PAROLE_GATTI = re.compile(r"gatt|felin|\bcats?\b|\bkitten|\bmici\b|\bmicio\b", re.IGNORECASE)
 PAROLE_CANI = re.compile(r"\bcan[ei]\b|canil|\bdogs?\b|cagnolin|cucciol", re.IGNORECASE)
 CHIAVI_ANIMALI = ("animal", "animal_shelter", "animal_shelter:animal", "species")
@@ -55,10 +56,11 @@ def motivo_solo_gatti(t):
     # un tag generico ("yes") non dice niente sugli animali
     specie = [x.strip() for x in re.split(r"[;,]", animali) if x.strip() and x.strip() not in ("yes", "designated")]
     if specie:
-        # i tag dicono quali animali: si toglie solo se sono tutti gatti (un'oasi con capre, conigli e un gatto resta)
-        if all(re.fullmatch(r"cats?|gatt[oi]", x) for x in specie):
-            return f"tag: {';'.join(specie)}"
-        return None
+        # i tag dicono quali animali accoglie il rifugio: resta solo se c'è il cane (o un'indicazione generica che lo
+        # può comprendere); un rifugio di soli gatti o di altre specie (es. un'oasi con capre e conigli) si toglie
+        if any(re.fullmatch(r"dogs?|cani?|canin[oi]|animals?|all|any|pets?|stray(_animals?)?|strays?|randagi", x) for x in specie):
+            return None
+        return f"tag: senza cani ({';'.join(specie)})"
     testo = " ".join(t.get(k, "") for k in ("name", "website", "contact:website"))
     if PAROLE_GATTI.search(testo) and not PAROLE_CANI.search(testo):
         return "nome/sito"
